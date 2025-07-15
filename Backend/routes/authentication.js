@@ -103,8 +103,8 @@ router.post("/login", async (req, res) => {
 
       const serialized = serialize("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // חשוב שזה יהיה true בפרודקשן
-        sameSite: "Lax",
+        secure: true,
+        sameSite: "None",
         maxAge: 60 * 60 * 24 * 30,
         path: "/",
       });
@@ -119,7 +119,7 @@ router.post("/login", async (req, res) => {
       };
 
       const message =
-        user.isAdmin === true // בדוק אם isAdmin הוא בוליאני ולא סטרינג "admin"
+        user.isAdmin === "admin"
           ? "Admin logged in successfully"
           : "User logged in succesfully";
 
@@ -142,8 +142,8 @@ router.post("/login", async (req, res) => {
 router.post("/logout", async (req, res) => {
   const serialized = serialize("token", "", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax",
+    secure: true,
+    sameSite: "None",
     expires: new Date(0),
     path: "/",
   });
