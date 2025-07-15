@@ -53,15 +53,39 @@ router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
 
+    // --- בדיקות נוספות להתחלה ---
+    console.log("Login attempt received.");
+    console.log("Received email:", email);
+    console.log(
+      "Received password (first 3 chars for security):",
+      password ? password.substring(0, 3) + "..." : "No password"
+    );
+    // --- סוף בדיקות נוספות ---
+
     const user = await User.findOne({ email });
+
+    // --- לוג: בדיקה האם המשתמש נמצא ---
     if (!user) {
+      console.log("Login failed: User not found for email:", email);
       return res.status(400).send({ error: "Invalid email or password" });
     }
+    console.log("User found in DB for email:", email);
+    console.log(
+      "Stored hashed password (from DB):",
+      user.password
+        ? user.password.substring(0, 10) + "..."
+        : "No hashed password"
+    ); // הצג רק חלק מה-hash
 
     const isMatch = await bcrypt.compare(password, user.password);
+
+    // --- לוג: בדיקת השוואת סיסמה ---
+    console.log("Result of bcrypt.compare (isMatch):", isMatch);
     if (!isMatch) {
+      console.log("Login failed: Password mismatch for email:", email);
       return res.status(400).send({ error: "Invalid password or email" });
     }
+    console.log("Password matched for user:", email);
 
     const payload = {
       _id: user._id,
@@ -73,17 +97,19 @@ router.post("/login", async (req, res) => {
     jwt.sign(payload, jwtSecret, { expiresIn: jwtExpiration }, (err, token) => {
       if (err) {
         console.log("failed to create token", err);
+        console.error("JWT Token creation error:", err); // לוג שגיאה מפורט יותר
         return res.status(500).send({ error: "server error" });
       }
 
       const serialized = serialize("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === "production", // חשוב שזה יהיה true בפרודקשן
         sameSite: "strict",
         maxAge: 60 * 60 * 24 * 30,
         path: "/",
       });
       res.setHeader("Set-Cookie", serialized);
+      console.log("Set-Cookie header sent with token."); // לוג: Cookie נשלח
 
       const returnUser = {
         name: user.name,
@@ -93,9 +119,11 @@ router.post("/login", async (req, res) => {
       };
 
       const message =
-        user.isAdmin === "admin"
+        user.isAdmin === true // בדוק אם isAdmin הוא בוליאני ולא סטרינג "admin"
           ? "Admin logged in successfully"
           : "User logged in succesfully";
+
+      console.log("Login successful for user:", email, "Message:", message); // לוג: התחברות מוצלחת סופית
 
       res.status(200).send({
         message,
@@ -104,7 +132,7 @@ router.post("/login", async (req, res) => {
       });
     });
   } catch (err) {
-    console.log("failed login", err);
+    console.error("Failed login attempt (catch block error):", err); // לוג מפורט לשגיאות כלליות
     return res.status(500).send({ error: "server error" });
   }
 });
