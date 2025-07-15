@@ -8,7 +8,7 @@ const Register = () => {
   const { message: registerMessage } = useAppSelector((state) => state.auth);
 
   const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [isRegistered, setIsRegistered] = useState(false);
+  const [, setIsRegistered] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

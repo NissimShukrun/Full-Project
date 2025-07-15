@@ -75,7 +75,7 @@ const orderSlice = createSlice({
         state.orders = action.payload;
         state.status = "idle";
       })
-      .addCase(logoutUser.fulfilled, (state) => {
+      .addCase(logoutUser.fulfilled, (_state) => {
         return initialState;
       });
   },
