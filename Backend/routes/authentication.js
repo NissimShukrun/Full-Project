@@ -104,7 +104,7 @@ router.post("/login", async (req, res) => {
       const serialized = serialize("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // חשוב שזה יהיה true בפרודקשן
-        sameSite: "strict",
+        sameSite: "Lax",
         maxAge: 60 * 60 * 24 * 30,
         path: "/",
       });
