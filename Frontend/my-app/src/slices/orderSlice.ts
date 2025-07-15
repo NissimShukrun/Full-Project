@@ -17,12 +17,15 @@ const initialState: OrderState = {
 export const placeOrder = createAsyncThunk(
   "orders/placeOrder",
   async (items: { product: string; quantity: number }[]) => {
-    const response = await fetch("http://localhost:5000/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ items }),
-    });
+    const response = await fetch(
+      "https://full-project-server.onrender.com/orders",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ items }),
+      }
+    );
     if (!response.ok) throw new Error("Order failed");
     return response.json();
   }
@@ -31,9 +34,12 @@ export const placeOrder = createAsyncThunk(
 export const fetchMyOrders = createAsyncThunk(
   "orders/fetchMyOrders",
   async () => {
-    const response = await fetch("http://localhost:5000/orders", {
-      credentials: "include",
-    });
+    const response = await fetch(
+      "https://full-project-server.onrender.com/orders",
+      {
+        credentials: "include",
+      }
+    );
     if (!response.ok) throw new Error("Failed to fetch orders");
     return response.json();
   }
@@ -42,9 +48,12 @@ export const fetchMyOrders = createAsyncThunk(
 export const fetchAllOrders = createAsyncThunk(
   "orders/fetchAllOrders",
   async () => {
-    const response = await fetch("http://localhost:5000/orders/all", {
-      credentials: "include",
-    });
+    const response = await fetch(
+      "https://full-project-server.onrender.com/orders/all",
+      {
+        credentials: "include",
+      }
+    );
     if (!response.ok) throw new Error("Failed to fetch all orders");
     return response.json();
   }
