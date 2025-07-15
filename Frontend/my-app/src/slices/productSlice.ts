@@ -14,7 +14,9 @@ const initialState: ProductState = {
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async () => {
-    const response = await fetch(`http://localhost:5000/products`);
+    const response = await fetch(
+      `https://full-project-server.onrender.com/products`
+    );
     if (!response.ok) throw new Error("Failed to fetch products");
     return response.json();
   }
@@ -23,7 +25,9 @@ export const fetchProducts = createAsyncThunk(
 export const fetchProductById = createAsyncThunk(
   "products/fetchProductById",
   async (id: string) => {
-    const response = await fetch(`http://localhost:5000/products/${id}`);
+    const response = await fetch(
+      `https://full-project-server.onrender.com/products/${id}`
+    );
     if (!response.ok) throw new Error("Failed to fetch product");
     return response.json();
   }
@@ -32,12 +36,15 @@ export const fetchProductById = createAsyncThunk(
 export const fetchCreateProduct = createAsyncThunk(
   "products/fetchCreateProduct",
   async (productData: { name: string; price: number; description: string }) => {
-    const response = await fetch(`http://localhost:5000/products`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(productData),
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://full-project-server.onrender.com/products`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(productData),
+        credentials: "include",
+      }
+    );
     if (!response.ok) throw new Error("Failed to create product");
     return response.json();
   }
@@ -54,12 +61,15 @@ export const fetchUpdateProduct = createAsyncThunk(
     price: number;
     description: string;
   }) => {
-    const response = await fetch(`http://localhost:5000/products/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(productData),
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://full-project-server.onrender.com/products/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(productData),
+        credentials: "include",
+      }
+    );
     if (!response.ok) throw new Error("Failed to create product");
     return response.json();
   }
@@ -68,11 +78,14 @@ export const fetchUpdateProduct = createAsyncThunk(
 export const fetchDeleteProduct = createAsyncThunk(
   "products/fetchDeleteProduct",
   async (id: string) => {
-    const response = await fetch(`http://localhost:5000/products/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://full-project-server.onrender.com/products/${id}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      }
+    );
     if (!response.ok && response.status !== 204)
       throw new Error("Failed to delete product");
     return id;

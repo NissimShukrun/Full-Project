@@ -14,12 +14,15 @@ const initialState: UserState = {
 export const fetchRegisterUser = createAsyncThunk(
   "auth/fetchRegisterUser",
   async (userData: { name: string; email: string; password: string }) => {
-    const response = await fetch(`http://localhost:5000/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://full-project-server.onrender.com/auth/register`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+        credentials: "include",
+      }
+    );
     if (!response.ok) throw new Error("Failed to create user");
     return response.json();
   }
@@ -28,22 +31,28 @@ export const fetchRegisterUser = createAsyncThunk(
 export const fetchLoginUser = createAsyncThunk(
   "auth/fetchLoginUser",
   async (userData: { email: string; password: string }) => {
-    const response = await fetch(`http://localhost:5000/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://full-project-server.onrender.com/auth/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+        credentials: "include",
+      }
+    );
     if (!response.ok) throw new Error("Failed to login user");
     return response.json();
   }
 );
 
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
-  const response = await fetch(`http://localhost:5000/auth/logout`, {
-    method: "POST",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `https://full-project-server.onrender.com/auth/logout`,
+    {
+      method: "POST",
+      credentials: "include",
+    }
+  );
   if (!response.ok) throw new Error("Logout failed");
   return true;
 });
@@ -51,10 +60,13 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
 export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async () => {
-    const response = await fetch("http://localhost:5000/auth/me", {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      "https://full-project-server.onrender.com/auth/me",
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
     if (!response.ok) throw new Error("User not authenticated");
     return response.json();
   }
